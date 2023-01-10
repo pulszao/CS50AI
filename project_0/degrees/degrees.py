@@ -55,17 +55,17 @@ def load_data(directory):
 def main():
     if len(sys.argv) > 2:
         sys.exit("Usage: python degrees.py [directory]")
-    directory = "small"  # TODO: sys.argv[1] if len(sys.argv) == 2 else "large"
+    directory = sys.argv[1] if len(sys.argv) == 2 else "large"
 
     # Load data from files into memory
     print("Loading data...")
     load_data(directory)
     print("Data loaded.")
 
-    source = person_id_for_name('Kevin Bacon')
+    source = person_id_for_name(input("Name: "))
     if source is None:
         sys.exit("Person not found.")
-    target = person_id_for_name('Dustin Hoffman')
+    target = person_id_for_name(input("Name: "))
     if target is None:
         sys.exit("Person not found.")
 
