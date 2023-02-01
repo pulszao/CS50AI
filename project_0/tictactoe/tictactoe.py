@@ -50,7 +50,20 @@ def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-    raise NotImplementedError
+    if empty_board(board):
+        return False
+
+    for row in board:
+        # player has compleated a row
+        if (row.count(X) or row.count(O)) == 3:
+            return True
+
+    if (board[0][0] == board[1][0] == board[2][0]) or (board[0][1] == board[1][1] == board[2][1]) or (
+            board[0][2] == board[1][2] == board[2][2]) or (board[0][0] == board[1][1] == board[2][2]):
+        return True
+
+    else:
+        return False
 
 
 def utility(board):
@@ -65,3 +78,14 @@ def minimax(board):
     Returns the optimal action for the current player on the board.
     """
     raise NotImplementedError
+
+
+def empty_board(board):
+    """
+    Returns True if the board is empty, False otherwise
+    """
+    for row in board:
+        if not row == [EMPTY, EMPTY, EMPTY]:
+            return False
+
+    return True
