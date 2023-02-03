@@ -25,9 +25,6 @@ def player(board):
     x = 0
     o = 0
 
-    if empty_board(board):
-        return X
-
     for row in board:
         for cell in row:
             if cell == O:
@@ -35,6 +32,8 @@ def player(board):
             if cell == X:
                 x += 1
 
+    if x == 0:
+        return X
     if x > o:
         return O
     else:
@@ -59,14 +58,46 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    raise NotImplementedError
+    if board[action[0]][action[1]] == EMPTY:
+        symbol = player(board)
+        board_cpy = copy.deepcopy(board)
+        board_cpy[action[0]][action[1]] = symbol
+
+        return board_cpy
+
+    else:
+        raise Exception('Invalid Move')
 
 
 def winner(board):
     """
     Returns the winner of the game, if there is one.
     """
-    raise NotImplementedError
+
+    for row in board:
+        # player has compleated a row
+        if row.count(X) == 3:
+            return X
+        elif row.count(O) == 3:
+            return O
+
+    if (board[0][0] == board[1][0] == board[2][0] == O) or (
+            board[0][1] == board[1][1] == board[2][1] == O) or (
+            board[0][2] == board[1][2] == board[2][2] == O) or (
+            board[0][2] == board[1][1] == board[2][0] == O) or (
+            board[0][0] == board[1][1] == board[2][2] == O):
+        return O
+
+    elif (board[0][0] == board[1][0] == board[2][0] == X) or (
+            board[0][1] == board[1][1] == board[2][1] == X) or (
+            board[0][2] == board[1][2] == board[2][2] == X) or (
+            board[0][2] == board[1][1] == board[2][0] == X) or (
+            board[0][0] == board[1][1] == board[2][2] == X):
+        return X
+
+    else:
+        # tie
+        return None
 
 
 def terminal(board):
