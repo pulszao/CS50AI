@@ -3,6 +3,7 @@ Tic Tac Toe Player
 """
 
 import math
+import copy
 
 X = "X"
 O = "O"
@@ -114,22 +115,67 @@ def utility(board):
     """
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
-    raise NotImplementedError
+    if terminal(board):
+        win_player = winner(board)
+
+        if win_player is None:
+            # tie
+            return 0
+        elif win_player == X:
+            return 1
+        else:
+            return -1
+
+    return
 
 
 def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    raise NotImplementedError
+    symbol = player(board)
+    moves = []
+
+    if terminal(board):
+        return None
+    else:
+        if symbol == X:
+            for action in actions(board):
+                moves.append([min_value(result(board, action)), action])
+                moves.sort(key=lambda x: x[0], reverse=True)
+        else:
+            for action in actions(board):
+                moves.append([max_value(result(board, action)), action])
+                moves.sort(key=lambda x: x[0])
+
+        return moves[0][1]
 
 
-def empty_board(board):
+def min_value(board):
     """
-    Returns True if the board is empty, False otherwise
+    Returns the best move for the min player 'O'.
     """
-    for row in board:
-        if not row == [EMPTY, EMPTY, EMPTY]:
-            return False
+    if terminal(board):
+        return utility(board)
 
-    return True
+    value = math.inf
+    for action in actions(board):
+        val = max_value(result(board, action))
+        value = min(value, val)
+
+    return value
+
+
+def max_value(board):
+    """
+    Returns the best move for the max player 'X'.
+    """
+    if terminal(board):
+        return utility(board)
+
+    value = -math.inf
+    for action in actions(board):
+        val = min_value(result(board, action))
+        value = max(value, val)
+
+    return value
